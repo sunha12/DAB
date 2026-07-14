@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>다온 · 다문화 가족 통합 지원 서비스</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+
+<style>
+  :root {
+    /* Navy Palette */
+    --navy-900: #0F1B3D;
+    --navy-800: #1A2D5A;
+    --navy-700: #243C76;
+    --navy-600: #2E4A8B;
+    --navy-500: #3B6CC4;
+    --navy-400: #6B8FD8;
+    --navy-100: #E8EEF9;
+    --navy-50:  #F4F7FC;
+
+    /* Surface */
+    --white: #FFFFFF;
+    --surface: #F7F8FB;
+    --border: #E5E9F2;
+    --border-strong: #C9D2E3;
+
+    /* Text */
+    --text-primary: #0F1B3D;
+    --text-secondary: #5A6B85;
+    --text-tertiary: #8A98B0;
+
+    /* Semantic */
+    --success: #1F7A4D;
+    --success-bg: #E4F4EC;
+    --warning: #B86E10;
+    --warning-bg: #FDF2DE;
+    --danger: #B53A3A;
+    --danger-bg: #FBE9E9;
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    --shadow-card: 0 2px 12px rgba(15, 27, 61, 0.06);
+    --shadow-elev: 0 8px 32px rgba(15, 27, 61, 0.12);
+    --shadow-deep: 0 24px 80px rgba(15, 27, 61, 0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background: linear-gradient(135deg, #EDF1F8 0%, #DDE5F2 100%);
+    min-height: 100vh;
+  }
+
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ======================== Desktop Stage ======================== */
+  .stage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .stage-meta {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 10;
+    color: var(--navy-800);
+    max-width: 280px;
+  }
+  .stage-meta .brand {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    color: var(--navy-500);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .stage-meta h1 {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .stage-meta p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .stage-hint {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    z-index: 10;
+  }
+
+  /* ======================== Mobile Frame ======================== */
+  .phone {
+    width: 394px;
+    height: 820px;
+    background: var(--white);
+    border-radius: 48px;
+    box-shadow:
+      0 0 0 12px #1a1a24,
+      0 0 0 14px #3a3a4a,
+      var(--shadow-deep);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .notch {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 28px;
+    background: #0a0a14;
+    border-radius: 20px;
+    z-index: 100;
+  }
+
+  .status-bar {
+    height: 48px;
+    padding: 16px 32px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-900);
+    flex-shrink: 0;
+  }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar svg { width: 16px; height: 16px; }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: #0a0a14;
+    border-radius: 3px;
+    z-index: 100;
+  }
+
+  /* ======================== App Shell ======================== */
+  .app {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .screens {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .screen {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    display: none;
+    padding-bottom: 100px;
+    background: var(--white);
+  }
+  .screen.active { display: block; }
+  .screen::-webkit-scrollbar { width: 0; }
+
+  /* ======================== Top Bar ======================== */
+  .topbar {
+    padding: 16px 24px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .topbar.with-back {
+    border-bottom: 1px solid var(--border);
+  }
+  .back-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--navy-50);
+    color: var(--navy-800);
+  }
+  .topbar-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy-900);
+  }
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: var(--navy-50);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-700);
+  }
+  .lang-toggle svg { width: 16px; height: 16px; }
+
+  /* ======================== Home ======================== */
+  .greeting {
+    padding: 8px 24px 20px;
+  }
+  .greeting .hello {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  .greeting .name {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--navy-900);
+    letter-spacing: -0.02em;
+  }
+  .greeting .name .accent { color: var(--navy-500); }
+
+  /* Hero alert: 양육수당 미수급 알림 (윤희 안 - 핵심 차별성) */
+  .alert-card {
+    margin: 8px 24px 20px;
+    background: linear-gradient(135deg, var(--navy-800) 0%, var(--navy-700) 100%);
+    color: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(26, 45, 90, 0.25);
+  }
+  .alert-card::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle, rgba(107, 143, 216, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .alert-card .label {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(4px);
+    padding: 5px 11px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .alert-card .title {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.35;
+    margin-bottom: 8px;
+    position: relative;
+    letter-spacing: -0.01em;
+  }
+  .alert-card .desc {
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.82);
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .alert-card .cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--white);
+    color: var(--navy-800);
+    padding: 16px 22px;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    width: 100%;
+    position: relative;
+    transition: transform 0.15s;
+  }
+  .alert-card .cta:active { transform: scale(0.98); }
+
+  /* Quick Action grid */
+  .quick-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 24px 24px;
+  }
+  .quick-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px 18px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 140px;
+    transition: all 0.2s;
+  }
+  .quick-card:active {
+    transform: scale(0.97);
+    background: var(--navy-50);
+  }
+  .quick-card .icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--navy-600);
+  }
+  .quick-card .icon-wrap.accent {
+    background: var(--navy-800);
+    color: var(--white);
+  }
+  .quick-card .title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy-900);
+    line-height: 1.3;
+  }
+  .quick-card .sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-top: -6px;
+  }
+
+  /* Section header */
+  .section-header {
+    padding: 8px 24px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .section-header h2 {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--navy-900);
+    letter-spacing: -0.01em;
+  }
+  .section-header .more {
+    font-size: 14px;
+    color: var(--navy-500);
+    font-weight: 600;
+  }
+
+  /* Nearby center card */
+  .center-list {
+    padding: 0 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .center-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.2s;
+  }
+  .center-card:active { background: var(--navy-50); }
+  .center-card .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .center-card .name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy-900);
+    line-height: 1.3;
+  }
+  .center-card .distance {
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy-500);
+    background: var(--navy-50);
+    padding: 6px 10px;
+    border-radius: 8px;
+  }
+  .center-card .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text-secondary);
+  }
+  .chip.lang { background: var(--success-bg); color: var(--success); }
+  .chip.open { background: var(--navy-50); color: var(--navy-700); }
+
+  /* ======================== Eligibility Quiz ======================== */
+  .quiz-progress {
+    padding: 4px 24px 20px;
+  }
+  .quiz-progress-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%;
+    background: var(--navy-500);
+    width: 40%;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+  .quiz-progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .quiz-progress-label .step { font-weight: 700; color: var(--navy-700); }
+
+  .quiz-question {
+    padding: 16px 24px 24px;
+  }
+  .quiz-question .step-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy-500);
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .quiz-question h3 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--navy-900);
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+  }
+  .quiz-question .hint {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 10px;
+  }
+
+  .quiz-options {
+    padding: 0 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .quiz-option {
+    width: 100%;
+    text-align: left;
+    padding: 20px 22px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy-900);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: all 0.15s;
+  }
+  .quiz-option:active {
+    transform: scale(0.98);
+  }
+  .quiz-option.selected {
+    border-color: var(--navy-500);
+    background: var(--navy-50);
+    color: var(--navy-800);
+  }
+  .quiz-option .check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--border-strong);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .quiz-option.selected .check {
+    background: var(--navy-500);
+    border-color: var(--navy-500);
+    color: var(--white);
+  }
+  .quiz-option .check svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0;
+  }
+  .quiz-option.selected .check svg { opacity: 1; }
+
+  .quiz-actions {
+    padding: 12px 24px 32px;
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, var(--white) 30%);
+    margin-top: auto;
+  }
+  .btn-primary {
+    width: 100%;
+    height: 64px;
+    border-radius: var(--radius-md);
+    background: var(--navy-800);
+    color: var(--white);
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.15s;
+    box-shadow: 0 4px 16px rgba(26, 45, 90, 0.2);
+  }
+  .btn-primary:active {
+    transform: scale(0.98);
+    background: var(--navy-900);
+  }
+  .btn-primary:disabled {
+    background: var(--border-strong);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  /* ======================== Center Finder ======================== */
+  .filter-bar {
+    padding: 8px 24px 16px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    flex-shrink: 0;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .filter-chip.active {
+    background: var(--navy-800);
+    border-color: var(--navy-800);
+    color: var(--white);
+  }
+  .filter-chip svg { width: 14px; height: 14px; }
+
+  /* Map placeholder */
+  .map-placeholder {
+    margin: 8px 24px 20px;
+    height: 180px;
+    border-radius: var(--radius-md);
+    background:
+      linear-gradient(135deg, var(--navy-50) 0%, var(--navy-100) 100%);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .map-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--navy-100) 1px, transparent 1px),
+      linear-gradient(90deg, var(--navy-100) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.6;
+  }
+  .map-pin {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--navy-800);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(26, 45, 90, 0.4);
+    border: 3px solid var(--white);
+  }
+  .map-pin.me {
+    background: var(--navy-500);
+    width: 20px;
+    height: 20px;
+    border: 4px solid var(--white);
+    box-shadow: 0 0 0 8px rgba(59, 108, 196, 0.2);
+  }
+
+  /* ======================== Categories ======================== */
+  .insight-banner {
+    margin: 8px 24px 20px;
+    padding: 18px 20px;
+    background: var(--navy-50);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--navy-500);
+  }
+  .insight-banner .label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy-500);
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .insight-banner .text {
+    font-size: 14px;
+    color: var(--navy-800);
+    line-height: 1.55;
+  }
+
+  .category-grid {
+    padding: 0 24px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .category-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 22px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+    transition: all 0.2s;
+    min-height: 150px;
+  }
+  .category-card:active {
+    transform: scale(0.97);
+    background: var(--navy-50);
+    border-color: var(--navy-100);
+  }
+  .category-card .icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--navy-800);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .category-card .name-ko {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy-900);
+    line-height: 1.3;
+  }
+  .category-card .name-native {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: -4px;
+  }
+  .category-card .count {
+    font-size: 12px;
+    color: var(--navy-500);
+    font-weight: 700;
+    margin-top: auto;
+  }
+
+  /* ======================== Profile ======================== */
+  .profile-header {
+    padding: 16px 24px 24px;
+    text-align: center;
+  }
+  .profile-avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-700) 0%, var(--navy-500) 100%);
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 32px;
+    font-weight: 700;
+    box-shadow: 0 6px 20px rgba(26, 45, 90, 0.2);
+  }
+  .profile-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy-900);
+    margin-bottom: 4px;
+  }
+  .profile-meta {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .stat-grid {
+    margin: 0 24px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background: var(--navy-50);
+    border-radius: var(--radius-md);
+    padding: 18px 8px;
+  }
+  .stat-item {
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item .value {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy-800);
+  }
+  .stat-item .label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .menu-list {
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .menu-item {
+    padding: 18px 4px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    width: 100%;
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item .icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--navy-50);
+    color: var(--navy-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .menu-item .label {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .menu-item .value {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* ======================== Tab Bar ======================== */
+  .tabbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 88px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 8px 8px 22px;
+    z-index: 100;
+  }
+  .tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 4px;
+    color: var(--text-tertiary);
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .tab-item svg { width: 26px; height: 26px; }
+  .tab-item.active { color: var(--navy-800); }
+  .tab-item.active svg { stroke-width: 2.4; }
+
+  /* Result page */
+  .result-hero {
+    padding: 24px;
+    background: linear-gradient(135deg, var(--navy-800) 0%, var(--navy-600) 100%);
+    color: var(--white);
+    text-align: center;
+  }
+  .result-hero .number {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -0.04em;
+  }
+  .result-hero .number-suffix {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .result-hero .desc {
+    font-size: 15px;
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+
+  .policy-list {
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .policy-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .policy-card .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--success-bg);
+    color: var(--success);
+    width: fit-content;
+  }
+  .policy-card .tag.missed {
+    background: var(--warning-bg);
+    color: var(--warning);
+  }
+  .policy-card .title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy-900);
+    line-height: 1.35;
+  }
+  .policy-card .desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .policy-card .amount {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy-700);
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 500px) {
+    body { background: var(--white); }
+    .stage { padding: 0; }
+    .stage-meta, .stage-hint { display: none; }
+    .phone {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .notch, .home-indicator { display: none; }
+    .status-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Desktop meta info -->
+<div class="stage-meta">
+  <div class="brand">DAB · MULTICULTURAL APP</div>
+  <h1>다온 (Da-on)</h1>
+  <p>다문화 가족을 위한 통합 지원 서비스. 회의록 기반 핵심 기능 5종 프로토타입.</p>
+</div>
+<div class="stage-hint">↓ 하단 탭으로 화면 전환 가능</div>
+
+<div class="stage">
+  <div class="phone">
+    <div class="notch"></div>
+
+    <!-- Status bar (cosmetic) -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h2v-8H2v8zm5 0h2V10H7v12zm5 0h2V6h-2v16zm5 0h2V2h-2v20z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 4h-3V2h-4v2H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>
+      </div>
+    </div>
+
+    <div class="app">
+      <div class="screens">
+
+        <!-- ============ SCREEN 1: HOME ============ -->
+        <section class="screen active" id="screen-home">
+          <header class="topbar">
+            <div>
+              <div style="font-size:13px;color:var(--text-secondary);font-weight:600">서울특별시 성북구</div>
+            </div>
+            <button class="lang-toggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              한국어 ▾
+            </button>
+          </header>
+
+          <div class="greeting">
+            <div class="hello">안녕하세요,</div>
+            <div class="name"><span class="accent">Linh</span>님 👋</div>
+          </div>
+
+          <!-- Hero: 양육수당 미수급 알림 (차별성 핵심) -->
+          <div class="alert-card">
+            <span class="label">📌 받지 못한 혜택 발견</span>
+            <div class="title">양육수당<br>신청하셨나요?</div>
+            <div class="desc">현재 자격 조건으로 매월 <strong style="color:#fff">최대 10만원</strong>을 받으실 수 있습니다. 지금 확인해 보세요.</div>
+            <button class="cta" onclick="navigate('quiz')">
+              <span>지금 자격 확인하기</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- Quick actions -->
+          <div class="quick-grid">
+            <button class="quick-card" onclick="navigate('quiz')">
+              <div class="icon-wrap accent">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+              </div>
+              <div>
+                <div class="title">자격 진단</div>
+                <div class="sub">받을 수 있는 지원 정책 5분 진단</div>
+              </div>
+            </button>
+            <button class="quick-card" onclick="navigate('center')">
+              <div class="icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div class="title">센터 찾기</div>
+                <div class="sub">베트남어 가능 센터 우선 추천</div>
+              </div>
+            </button>
+            <button class="quick-card" onclick="navigate('category')">
+              <div class="icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+              </div>
+              <div>
+                <div class="title">고민 상담</div>
+                <div class="sub">자녀 교육 · 의료 · 부부 갈등</div>
+              </div>
+            </button>
+            <button class="quick-card" onclick="navigate('category')">
+              <div class="icon-wrap">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              </div>
+              <div>
+                <div class="title">일자리 매칭</div>
+                <div class="sub">언어 가능 채용 공고 7건</div>
+              </div>
+            </button>
+          </div>
+
+          <!-- Nearby centers -->
+          <div class="section-header">
+            <h2>가까운 센터</h2>
+            <button class="more" onclick="navigate('center')">전체 →</button>
+          </div>
+          <div class="center-list">
+            <button class="center-card">
+              <div class="top">
+                <div class="name">성북구 가족센터<br>(2센터)</div>
+                <div class="distance">0.8km</div>
+              </div>
+              <div class="meta">
+                <span class="chip lang">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+                  베트남어 가능
+                </span>
+                <span class="chip open">평일 09–18시</span>
+                <span class="chip">통역 예약</span>
+              </div>
+            </button>
+            <button class="center-card">
+              <div class="top">
+                <div class="name">고려대학교 가족센터<br>(1센터)</div>
+                <div class="distance">1.2km</div>
+              </div>
+              <div class="meta">
+                <span class="chip">중국어 · 영어</span>
+                <span class="chip open">평일 09–18시</span>
+              </div>
+            </button>
+          </div>
+        </section>
+
+        <!-- ============ SCREEN 2: ELIGIBILITY QUIZ ============ -->
+        <section class="screen" id="screen-quiz">
+          <header class="topbar with-back">
+            <button class="back-btn" onclick="navigate('home')">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="topbar-title">자격 진단</div>
+            <div style="width:44px"></div>
+          </header>
+
+          <div class="quiz-progress">
+            <div class="quiz-progress-bar">
+              <div class="quiz-progress-fill" id="quizFill" style="width:40%"></div>
+            </div>
+            <div class="quiz-progress-label">
+              <span><span class="step" id="quizStep">2</span> / 5 단계</span>
+              <span>약 3분 소요</span>
+            </div>
+          </div>
+
+          <div class="quiz-question">
+            <div class="step-label">STEP 02 · 가구 구성</div>
+            <h3 id="quizTitle">자녀가 있으신가요?<br>몇 명인가요?</h3>
+            <div class="hint">미취학 자녀(만 0~6세) 수를 알려주세요.</div>
+          </div>
+
+          <div class="quiz-options" id="quizOptions">
+            <button class="quiz-option" onclick="selectOption(this)">
+              <span>없음</span>
+              <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            </button>
+            <button class="quiz-option selected" onclick="selectOption(this)">
+              <span>1명</span>
+              <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            </button>
+            <button class="quiz-option" onclick="selectOption(this)">
+              <span>2명</span>
+              <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            </button>
+            <button class="quiz-option" onclick="selectOption(this)">
+              <span>3명 이상</span>
+              <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            </button>
+          </div>
+
+          <div class="quiz-actions">
+            <button class="btn-primary" onclick="navigate('result')">
+              다음
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- ============ SCREEN 3: RESULT ============ -->
+        <section class="screen" id="screen-result">
+          <header class="topbar with-back">
+            <button class="back-btn" onclick="navigate('quiz')">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="topbar-title">진단 결과</div>
+            <div style="width:44px"></div>
+          </header>
+
+          <div class="result-hero">
+            <div class="number">7<span class="number-suffix">개</span></div>
+            <div class="desc">신청 가능한 지원 정책이<br>발견되었습니다</div>
+          </div>
+
+          <div class="policy-list">
+            <div class="policy-card" style="border-color:var(--warning);background:#FFFBF3">
+              <span class="tag missed">⚠️ 미신청 - 신청 가능</span>
+              <div class="title">양육수당 (만 0–6세)</div>
+              <div class="desc">매월 정기 지급. 동주민센터 또는 복지로(bokjiro.go.kr)에서 신청.</div>
+              <div class="amount">월 100,000원</div>
+            </div>
+            <div class="policy-card">
+              <span class="tag">✓ 신청 가능</span>
+              <div class="title">다문화가족 방문교육 서비스</div>
+              <div class="desc">한국어 · 자녀생활 · 부모교육 무료 방문 지원</div>
+              <div class="amount">최대 10개월 무료</div>
+            </div>
+            <div class="policy-card">
+              <span class="tag">✓ 신청 가능</span>
+              <div class="title">통번역 서비스 (베트남어)</div>
+              <div class="desc">의료기관·관공서 동행 통역 서비스</div>
+              <div class="amount">연 20회 무료</div>
+            </div>
+            <div class="policy-card">
+              <span class="tag">✓ 신청 가능</span>
+              <div class="title">자녀 언어발달 지원</div>
+              <div class="desc">만 12세 이하 자녀 대상 언어 평가 · 교육</div>
+              <div class="amount">월 4회 무료</div>
+            </div>
+          </div>
+
+          <div style="padding: 12px 24px 32px">
+            <button class="btn-primary">전체 정책 확인하기</button>
+          </div>
+        </section>
+
+        <!-- ============ SCREEN 4: CENTER FINDER ============ -->
+        <section class="screen" id="screen-center">
+          <header class="topbar with-back">
+            <button class="back-btn" onclick="navigate('home')">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="topbar-title">센터 찾기</div>
+            <div style="width:44px"></div>
+          </header>
+
+          <div class="filter-bar">
+            <button class="filter-chip active">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+              내 언어 가능
+            </button>
+            <button class="filter-chip">현재 운영중</button>
+            <button class="filter-chip">2km 이내</button>
+            <button class="filter-chip">통역 예약</button>
+            <button class="filter-chip">자녀 프로그램</button>
+          </div>
+
+          <!-- Map placeholder -->
+          <div class="map-placeholder">
+            <div class="map-pin me" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+            <div class="map-pin" style="top:30%;left:35%">1</div>
+            <div class="map-pin" style="top:62%;left:60%">2</div>
+            <div class="map-pin" style="top:28%;left:72%">3</div>
+            <div class="map-pin" style="top:72%;left:28%">4</div>
+            <div style="position:absolute;bottom:12px;left:12px;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;color:var(--navy-700)">📍 내 위치 기준</div>
+          </div>
+
+          <div class="section-header">
+            <h2>매칭 점수 순</h2>
+            <span class="more">총 8개</span>
+          </div>
+
+          <div class="center-list">
+            <button class="center-card" style="border-color:var(--navy-500);border-width:2px">
+              <div class="top">
+                <div>
+                  <div class="name">성북구 가족센터 (2센터)</div>
+                  <div style="font-size:12px;color:var(--text-tertiary);margin-top:4px">성북구 정릉로61-6</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:22px;font-weight:800;color:var(--navy-500);line-height:1">98<span style="font-size:14px;color:var(--text-tertiary)">점</span></div>
+                  <div class="distance" style="margin-top:6px">0.8km</div>
+                </div>
+              </div>
+              <div class="meta">
+                <span class="chip lang">베트남어 ✓</span>
+                <span class="chip open">평일 09–18시</span>
+                <span class="chip">통역 예약 가능</span>
+              </div>
+            </button>
+
+            <button class="center-card">
+              <div class="top">
+                <div>
+                  <div class="name">고려대학교 가족센터 (1센터)</div>
+                  <div style="font-size:12px;color:var(--text-tertiary);margin-top:4px">성북구 안암로 145</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:22px;font-weight:800;color:var(--navy-700);line-height:1">82<span style="font-size:14px;color:var(--text-tertiary)">점</span></div>
+                  <div class="distance" style="margin-top:6px">1.2km</div>
+                </div>
+              </div>
+              <div class="meta">
+                <span class="chip">중국어 · 영어</span>
+                <span class="chip open">평일 09–18시</span>
+              </div>
+            </button>
+
+            <button class="center-card">
+              <div class="top">
+                <div>
+                  <div class="name">동대문구 다문화가족지원센터</div>
+                  <div style="font-size:12px;color:var(--text-tertiary);margin-top:4px">동대문구 무학로 89</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:22px;font-weight:800;color:var(--navy-700);line-height:1">74<span style="font-size:14px;color:var(--text-tertiary)">점</span></div>
+                  <div class="distance" style="margin-top:6px">2.4km</div>
+                </div>
+              </div>
+              <div class="meta">
+                <span class="chip lang">베트남어 ✓</span>
+                <span class="chip">자녀 프로그램</span>
+              </div>
+            </button>
+          </div>
+        </section>
+
+        <!-- ============ SCREEN 5: CATEGORY (Text Mining Result) ============ -->
+        <section class="screen" id="screen-category">
+          <header class="topbar with-back">
+            <button class="back-btn" onclick="navigate('home')">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="topbar-title">고민 상담</div>
+            <div style="width:44px"></div>
+          </header>
+
+          <!-- Insight banner: text mining 근거 -->
+          <div class="insight-banner">
+            <div class="label">데이터 기반 추천</div>
+            <div class="text">최근 1년간 베트남 출신 다문화가족이 가장 많이 상담한 주제 순서로 정렬했어요.</div>
+          </div>
+
+          <div class="category-grid">
+            <button class="category-card">
+              <div class="icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <div>
+                <div class="name-ko">자녀 교육</div>
+                <div class="name-native">Giáo dục con cái</div>
+              </div>
+              <div class="count">상담 1,247건</div>
+            </button>
+            <button class="category-card">
+              <div class="icon-wrap" style="background:var(--navy-600)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.3 2.5-3.2 2.5-5.5a7 7 0 00-7-7c-2.3 0-4.2 1-5.5 2.5"/><path d="M9 21l3-3 3 3M2 12l3-3-3-3M15 8a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              </div>
+              <div>
+                <div class="name-ko">한국어 학습</div>
+                <div class="name-native">Học tiếng Hàn</div>
+              </div>
+              <div class="count">상담 982건</div>
+            </button>
+            <button class="category-card">
+              <div class="icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.3 2.5-3.2 2.5-5.5a7 7 0 00-7-7c-2.3 0-4.2 1-5.5 2.5"/><path d="M12 22.5V12M9 15h6M3 22h18"/></svg>
+              </div>
+              <div>
+                <div class="name-ko">의료 · 건강</div>
+                <div class="name-native">Y tế · Sức khỏe</div>
+              </div>
+              <div class="count">상담 743건</div>
+            </button>
+            <button class="category-card">
+              <div class="icon-wrap" style="background:var(--navy-600)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+              </div>
+              <div>
+                <div class="name-ko">부부 관계</div>
+                <div class="name-native">Mối quan hệ vợ chồng</div>
+              </div>
+              <div class="count">상담 612건</div>
+            </button>
+            <button class="category-card">
+              <div class="icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+              </div>
+              <div>
+                <div class="name-ko">취업 · 자격증</div>
+                <div class="name-native">Việc làm</div>
+              </div>
+              <div class="count">상담 528건</div>
+            </button>
+            <button class="category-card">
+              <div class="icon-wrap" style="background:var(--navy-600)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div>
+                <div class="name-ko">체류 · 비자</div>
+                <div class="name-native">Cư trú · Visa</div>
+              </div>
+              <div class="count">상담 394건</div>
+            </button>
+          </div>
+        </section>
+
+        <!-- ============ SCREEN 6: PROFILE ============ -->
+        <section class="screen" id="screen-profile">
+          <header class="topbar">
+            <div class="topbar-title">마이페이지</div>
+            <button class="lang-toggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            </button>
+          </header>
+
+          <div class="profile-header">
+            <div class="profile-avatar">L</div>
+            <div class="profile-name">Linh Nguyen</div>
+            <div class="profile-meta">베트남 · 한국 거주 3년 4개월</div>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat-item">
+              <div class="value">7</div>
+              <div class="label">자격 정책</div>
+            </div>
+            <div class="stat-item">
+              <div class="value">2</div>
+              <div class="label">미신청</div>
+            </div>
+            <div class="stat-item">
+              <div class="value">12</div>
+              <div class="label">즐겨찾기</div>
+            </div>
+          </div>
+
+          <div class="menu-list">
+            <button class="menu-item">
+              <div class="icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+              </div>
+              <div class="label">내 자격 진단 결과</div>
+              <div class="value">7개 →</div>
+            </button>
+            <button class="menu-item">
+              <div class="icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+              </div>
+              <div class="label">즐겨찾기 센터</div>
+              <div class="value">3개 →</div>
+            </button>
+            <button class="menu-item">
+              <div class="icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+              </div>
+              <div class="label">알림 설정</div>
+              <div class="value">→</div>
+            </button>
+            <button class="menu-item">
+              <div class="icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              </div>
+              <div class="label">언어 설정</div>
+              <div class="value">한국어 →</div>
+            </button>
+            <button class="menu-item">
+              <div class="icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+              </div>
+              <div class="label">자주 묻는 질문</div>
+              <div class="value">→</div>
+            </button>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ======================== Tab Bar ======================== -->
+      <nav class="tabbar">
+        <button class="tab-item active" data-screen="home" onclick="navigate('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>홈</span>
+        </button>
+        <button class="tab-item" data-screen="quiz" onclick="navigate('quiz')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          <span>자격 진단</span>
+        </button>
+        <button class="tab-item" data-screen="center" onclick="navigate('center')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>센터</span>
+        </button>
+        <button class="tab-item" data-screen="category" onclick="navigate('category')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          <span>상담</span>
+        </button>
+        <button class="tab-item" data-screen="profile" onclick="navigate('profile')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>마이</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="home-indicator"></div>
+  </div>
+</div>
+
+<script>
+  function navigate(screen) {
+    // Hide all
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    // Show target
+    const target = document.getElementById('screen-' + screen);
+    if (target) {
+      target.classList.add('active');
+      target.scrollTop = 0;
+    }
+    // Update tabbar
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    const tabMap = { home: 'home', quiz: 'quiz', result: 'quiz', center: 'center', category: 'category', profile: 'profile' };
+    const activeTab = document.querySelector(`.tab-item[data-screen="${tabMap[screen] || screen}"]`);
+    if (activeTab) activeTab.classList.add('active');
+  }
+
+  function selectOption(el) {
+    el.parentElement.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+
+</body>
+</html>
